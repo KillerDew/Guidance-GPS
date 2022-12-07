@@ -1,25 +1,11 @@
 {
   "files": {
-    "VincentySolution.py": [
-      {
-        "id": "584ff122-dba1-4d7a-bae0-d1858c0c7852",
-        "line": 75,
-        "version": 2211,
-        "index": 2105
-      }
-    ],
     "main.py": [
       {
-        "id": "d9b612f0-0235-4882-ad37-b1b33835bf82",
-        "line": 33,
-        "version": 1609,
-        "index": 969
-      },
-      {
-        "id": "2d2d509b-ee82-4678-9ae3-aa3a86cabf46",
-        "line": 39,
-        "version": 1609,
-        "index": 1144
+        "id": "37d2d3a0-c7d3-4f04-a769-d26621428844",
+        "line": 106,
+        "version": 3528,
+        "index": 3077
       }
     ]
   }

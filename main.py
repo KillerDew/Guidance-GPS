@@ -4,12 +4,10 @@ from datatypes import GeoLocation
 from inverse import vincentyinverse
 from direct import vincentydirect
 from enum import Enum
+import math
+from math import tan
 
-class FLIGHTTYPE(Enum):
-  Direct = 1
-  Top_Down = 2
-  Pop_Up = 3
-  Custom = 4
+radconversion = math.pi/180
 
 #print(VincentySolution.Bearing_Dist((GeoLocation(51.967257920383155, -0.22752416320145133, 98)), (GeoLocation(51.96683486806281, -0.22743296809494498, 95)))) #not working
 
@@ -41,15 +39,15 @@ class FLIGHTTYPE(Enum):
 # FIX
 
 
-x = GeoLocation(51.96790250975882, -0.2273349836468697, 0)
-y = GeoLocation(51.9658401216410, -0.22791434079408648, 0)
-result = (vincentyinverse(x, y))
+#x = GeoLocation(51.96790250975882, -0.2273349836468697, 0)
+#y = GeoLocation(51.9658401216410, -0.22791434079408648, 0)
+#result = (vincentyinverse(x, y))
 
-result2 = vincentydirect(x, result[0], result[2]*0.5)
+#result2 = vincentydirect(x, result[0], result[2]*0.5)
 #print(result)
 
-print()
-print(result2)
+#print()
+#print(result2)
   #--Works--
 
 
@@ -58,17 +56,62 @@ print(result2)
 ##INTERFACE
 
 def inputs():
-  pass
-  #Fligh_type = FLIGHTTYPE(input("Flight Type [Direct, Top_Down, Pop_Up, Custom]: "))
-  #print (Fligh_type)
+  
+  flightype = input("Flight type [1: Direct, 2: Top down, 3: Pop Up]: ")
 
+  if (flightype == "1"):
+    pass
+  elif (flightype == "2"):
+    pass
+  elif(flightype =="3"):
+    Popupheight = float(input("Pop up height (m): "))
+    Maxclimb = float(input("max climb angle (deg): "))
+    maxdive = float(input("Max dive angle (deg): "))
+    launchstr = input("Launch Point [lat, long, alt]: ")
+    Launch = GeoLocation(0, 0, 0)
+    Launch.Latitude = float(launchstr.split(",")[0])
+    Launch.Longitude = float(launchstr.split(",")[1])
+    Launch.ALtitude = float(launchstr.split(",")[2])
 
+    targstr = input("Target Point [lat, long, alt")
+    Target = GeoLocation(0, 0, 0)
+    Target.Latitude = float(targstr.split(",")[0])
+    Target.Longitude = float(targstr.split(",")[1])
+    Target.ALtitude = float(targstr.split(",")[2])
 
+    ΔAltitude = Target.ALtitude - Launch.ALtitude
 
+    inverse_result = vincentyinverse(Launch, Target)
+    b_i = inverse_result[0]
+    b_f = inverse_result[1]
+    d_T = inverse_result[2]
 
+    d_c = Popupheight/tan(Maxclimb*radconversion)
+    d_d = Popupheight*tan(maxdive*radconversion)
 
+    d_0 = d_T*(1-((d_d+d_c)/d_T))
 
+    direct_result = vincentydirect(Launch, b_i, d_0)
+    climb_point = GeoLocation(0, 0, 0)
+    climb_point.Latitude = direct_result[0]
+    climb_point.Longitude = direct_result[1]
+    climb_point.Altitude = ΔAltitude*(d_0/d_T)
 
+    direct_result = vincentydirect(climb_point, b_i, d_c)
+
+    Dive_point = GeoLocation(0, 0, 0)
+    Dive_point.Latitude = direct_result[0]
+    Dive_point.Longitude = direct_result[1]
+    Dive_point.Altitude = ΔAltitude*((d_0+d_c)/d_T)
+    print()
+    print(climb_point)
+    print()
+    print(Dive_point)
+    #--Pop Up End--
+    
+    
+
+    
 
 inputs()
 
