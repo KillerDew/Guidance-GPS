@@ -60,7 +60,29 @@ def inputs():
   flightype = input("Flight type [1: Direct, 2: Top down, 3: Pop Up]: ")
 
   if (flightype == "1"):
-    pass
+    midheight = float(input("Mid-height (m): "))
+    maxclimb = float(input("Max climb angle (deg): "))
+    launchstr = input("Launch point [lat, long, alt]: ")
+    Launch = GeoLocation(0, 0, 0)
+    Launch.Latitude = float(launchstr.split(",")[0])
+    Launch.Longitude = float(launchstr.split(",")[1])
+    Launch.ALtitude = float(launchstr.split(",")[2])
+
+    targetstr = input("Target Point [lat, long, alt]: ")
+    Target = GeoLocation(0, 0, 0)
+    Target.Latitude = float(targetstr.split(",")[0])
+    Target.Longitude = float(targetstr.split(",")[1])
+    Target.ALtitude = float(targetstr.split(",")[2])
+
+    inverseresult = vincentyinverse(Launch, Target)
+    b_i = inverseresult[0]
+    b_f = inverseresult[1]
+    D_T = inverseresult[2]
+    
+    d_d = midheight/tan(maxclimb*radconversion)
+    directresult = vincentydirect(Launch, b_i, d_d)
+    MID_POINT = GeoLocation(directresult[0], directresult[1], Launch.ALtitude)
+    print(MID_POINT)
   elif (flightype == "2"):
     pass
   elif(flightype =="3"):
