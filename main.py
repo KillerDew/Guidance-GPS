@@ -84,7 +84,45 @@ def inputs():
     MID_POINT = GeoLocation(directresult[0], directresult[1], Launch.ALtitude)
     print(MID_POINT)
   elif (flightype == "2"):
-    pass
+    midheight = float(input("Coast Height (m): "))
+    maxclimb = float(input("Max climb angle (deg): "))
+    maxdive = float(input("Max dive angle (deg): "))
+    Launchstr = input("Launch point [lat, long, alt]: ")
+    Launch = GeoLocation(0, 0, 0)
+    Launch.Latitude = float(Launchstr.split(",")[0])
+    Launch.Longitude = float(Launchstr.split(",")[1])
+    Launch.ALtitude = float(Launchstr.split(",")[2])
+
+    targetstr = input("Target point [lat, long, alt]: ")
+    Target = GeoLocation(0, 0, 0)
+    Target.Latitude = float(targetstr.split(",")[0])
+    Target.Longitude = float(targetstr.split(",")[1])
+    Target.ALtitude = float(targetstr.split(",")[2])
+
+    inverseresult = vincentyinverse(Launch, Target)
+    B_i = inverseresult[0]
+    B_f = inverseresult[1]
+    D_T = inverseresult[2]
+
+    D_c = midheight/tan(maxclimb*radconversion)
+    D_d = midheight*tan(maxdive*radconversion)
+
+    directresult = vincentydirect(Launch, B_i, D_c)
+    Coastpoint = GeoLocation(0, 0, 0)
+    Coastpoint.Latitude = directresult[0]
+    Coastpoint.Longitude = directresult[1]
+    Coastpoint.ALtitude = Launch.ALtitude
+
+    directresult = vincentydirect(Launch, B_i, D_T-D_d)
+    DivePoint = GeoLocation(0, 0, 0)
+    DivePoint.Latitude = directresult[0]
+    DivePoint.Longitude = directresult[1]
+    DivePoint.ALtitude = Target.ALtitude
+
+    print()
+    print(Coastpoint)
+    print()
+    print(DivePoint)
   elif(flightype =="3"):
     Popupheight = float(input("Pop up height (m): "))
     Maxclimb = float(input("max climb angle (deg): "))
